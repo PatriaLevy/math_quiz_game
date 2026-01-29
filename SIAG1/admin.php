@@ -339,4 +339,5 @@ $playerStats = $playerStatsStmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 </body>
+
 </html>
