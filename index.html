@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Dice Math Quiz</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ================================================ -->
+    <!-- LOGIN SCREEN -->
+    <!-- ================================================ -->
+    <div id="loginScreen" class="screen active">
+    <div class="auth-container">
+    <div class="auth-box">
+        <div class="game-logo">🎲</div>
+        <h1>Color Dice Quiz</h1>
+        <p class="tagline">Roll the dice, solve the math!</p>
+                
+        <div id="loginForm">
+            <h2>Login</h2>
+            <input type="text" id="loginUsername" placeholder="Username" autocomplete="username" />
+            <div style="position: relative;">
+                <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" style="padding-right: 50px;" />
+                <button type="button" onclick="togglePassword('loginPassword', this)" class="password-toggle-icon">
+                    <svg class="eye-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <svg class="eye-off-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                    </svg>
+                </button>
+            </div>
+            <div id="loginError" class="error-message"></div>
+            <button onclick="login()" class="btn-primary">Login</button>
+            <p class="switch-auth">Don't have an account? <a href="#" onclick="showRegister()">Register</a></p>
+        </div>
+        
+        <div id="registerForm" style="display: none;">
+            <h2>Create Account</h2>
+            <input type="text" id="registerUsername" placeholder="Username" autocomplete="username" />
+            <div style="position: relative;">
+                <input type="password" id="registerPassword" placeholder="Password (min 6 characters)" autocomplete="new-password" style="padding-right: 50px;" />
+                <button type="button" onclick="togglePassword('registerPassword', this)" class="password-toggle-icon">
+                    <svg class="eye-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <svg class="eye-off-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                    </svg>
+                </button>
+            </div>
+            <div style="position: relative;">
+                <input type="password" id="registerConfirm" placeholder="Confirm Password" autocomplete="new-password" style="padding-right: 50px;" />
+                <button type="button" onclick="togglePassword('registerConfirm', this)" class="password-toggle-icon">
+                    <svg class="eye-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <svg class="eye-off-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                    </svg>
+                </button>
+            </div>
+            <div id="registerError" class="error-message"></div>
+            <button onclick="register()" class="btn-primary">Create Account</button>
+            <p class="switch-auth">Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+        </div>
+    </div>
+    </div>
+    </div>
+
+    <!-- ================================================ -->
+    <!-- MAIN PAGE -->
+    <!-- ================================================ -->
+    <div id="mainScreen" class="screen">
+        <!-- Profile Button (Upper Left) -->
+        <div class="profile-btn" onclick="toggleProfile()">
+            <div class="profile-icon">👤</div>
+            <span id="mainUsername">Player</span>
+        </div>
+        
+        <!-- Profile Dropdown -->
+        <div id="profileDropdown" class="profile-dropdown">
+            <div class="profile-header">
+                <div class="profile-avatar">👤</div>
+                <div class="profile-info">
+                    <h3 id="profileUsername">Player</h3>
+                    <button onclick="logout()" class="btn-logout">Logout</button>
+                </div>
+            </div>
+            
+            <div class="profile-section">
+                <h4>🏆 High Scores</h4>
+                <div class="score-list">
+                    <div class="score-item">
+                        <span class="score-diff easy">🔥 Easy</span>
+                        <span class="score-value" id="profileEasy">0</span>
+                    </div>
+                    <div class="score-item">
+                        <span class="score-diff medium">⚡ Medium</span>
+                        <span class="score-value" id="profileMedium">0</span>
+                    </div>
+                    <div class="score-item">
+                        <span class="score-diff hard">💀 Hard</span>
+                        <span class="score-value" id="profileHard">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-section">
+                <h4>📜 Game History</h4>
+                <div id="gameHistory" class="history-list">
+                    <p class="no-history">No games played yet</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-container">
+            <div class="main-content">
+                <h1 class="main-title">Color Dice Math Quiz</h1>
+                <p class="main-subtitle">Test your math skills in a fun dice game!</p>
+                
+                <!-- Game Preview/Display -->
+                <div class="game-display">
+                    <div class="display-dice">🎲</div>
+                    <div class="display-operations">
+                        <div class="op-card red">+</div>
+                        <div class="op-card blue">−</div>
+                        <div class="op-card green">×</div>
+                        <div class="op-card yellow">÷</div>
+                    </div>
+                </div>
+                
+                <!-- Difficulty Buttons -->
+                <div class="difficulty-select">
+                    <h2>Choose Your Difficulty</h2>
+                    <div class="diff-buttons">
+                        <button onclick="startGame('easy')" class="diff-btn easy">
+                            <span class="diff-icon">🔥</span>
+                            <span class="diff-name">Easy</span>
+                            <span class="diff-time">60 seconds</span>
+                        </button>
+                        <button onclick="startGame('medium')" class="diff-btn medium">
+                            <span class="diff-icon">⚡</span>
+                            <span class="diff-name">Medium</span>
+                            <span class="diff-time">45 seconds</span>
+                        </button>
+                        <button onclick="startGame('hard')" class="diff-btn hard">
+                            <span class="diff-icon">💀</span>
+                            <span class="diff-name">Hard</span>
+                            <span class="diff-time">30 seconds</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Help Link -->
+                <div class="help-section">
+                    <a href="#" onclick="showHelp()" class="help-link">❓ How to Play</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================ -->
+    <!-- HELP MODAL -->
+    <!-- ================================================ -->
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeHelp()">&times;</span>
+            <h2>📖 How to Play</h2>
+            
+            <div class="help-section-content">
+                <h3>🎯 Game Rules</h3>
+                <ol>
+                    <li>Choose your difficulty level (Easy, Medium, or Hard)</li>
+                    <li>Tap the dice to roll and get a random math operation</li>
+                    <li>Watch the countdown (3, 2, 1...)</li>
+                    <li>Solve the math problem as quickly as possible</li>
+                    <li>Keep playing until time runs out!</li>
+                </ol>
+            </div>
+            
+            <div class="help-section-content">
+                <h3>🎲 Operations</h3>
+                <ul class="operations-list">
+                    <li><span class="op-badge red">+</span> Red = Addition</li>
+                    <li><span class="op-badge blue">−</span> Blue = Subtraction</li>
+                    <li><span class="op-badge green">×</span> Green = Multiplication</li>
+                    <li><span class="op-badge yellow">÷</span> Yellow = Division</li>
+                </ul>
+            </div>
+            
+            <div class="help-section-content">
+                <h3>⏱️ Time System</h3>
+                <p>Your timer keeps running throughout the game. Answer correctly to gain time, answer wrong to lose time!</p>
+                
+                <div class="time-tables">
+                    <div class="time-table">
+                        <h4>🔥 Easy Mode (60s max)</h4>
+                        <table>
+                            <tr><th>Response Time</th><th>Bonus/Penalty</th></tr>
+                            <tr><td>≤ 4 seconds</td><td class="bonus">+15 seconds</td></tr>
+                            <tr><td>≤ 8 seconds</td><td class="bonus">+10 seconds</td></tr>
+                            <tr><td>≤ 12 seconds</td><td class="bonus">+5 seconds</td></tr>
+                            <tr><td>> 12 seconds</td><td class="bonus">+2 seconds</td></tr>
+                            <tr><td>Wrong Answer</td><td class="penalty">-15/10/5/2s</td></tr>
+                        </table>
+                    </div>
+                    
+                    <div class="time-table">
+                        <h4>⚡ Medium Mode (45s max)</h4>
+                        <table>
+                            <tr><th>Response Time</th><th>Bonus/Penalty</th></tr>
+                            <tr><td>≤ 3 seconds</td><td class="bonus">+12 seconds</td></tr>
+                            <tr><td>≤ 6 seconds</td><td class="bonus">+8 seconds</td></tr>
+                            <tr><td>≤ 9 seconds</td><td class="bonus">+4 seconds</td></tr>
+                            <tr><td>> 9 seconds</td><td class="bonus">+1 second</td></tr>
+                            <tr><td>Wrong Answer</td><td class="penalty">-12/8/4/1s</td></tr>
+                        </table>
+                    </div>
+                    
+                    <div class="time-table">
+                        <h4>💀 Hard Mode (30s max)</h4>
+                        <table>
+                            <tr><th>Response Time</th><th>Bonus/Penalty</th></tr>
+                            <tr><td>≤ 2 seconds</td><td class="bonus">+10 seconds</td></tr>
+                            <tr><td>≤ 4 seconds</td><td class="bonus">+6 seconds</td></tr>
+                            <tr><td>≤ 6 seconds</td><td class="bonus">+3 seconds</td></tr>
+                            <tr><td>> 6 seconds</td><td class="bonus">+1 second</td></tr>
+                            <tr><td>Wrong Answer</td><td class="penalty">-10/6/3/1s</td></tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="time-note">
+                    <strong>⚠️ Important:</strong> Time cannot exceed the maximum for your difficulty level!
+                </div>
+            </div>
+            
+            <div class="help-section-content">
+                <h3>🏆 Scoring</h3>
+                <ul>
+                    <li><strong>Base Points:</strong> 100 points per correct answer</li>
+                    <li><strong>Speed Bonus:</strong> Extra points based on how fast you answer</li>
+                    <li><strong>Formula:</strong> Total Points = 100 + (Time Bonus × 10)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================ -->
+    <!-- GAME SCREEN -->
+    <!-- ================================================ -->
+    <div id="gameScreen" class="screen">
+        <div class="game-header">
+            <div class="header-left">
+                <div class="stat-badge username-badge">
+                    <span id="gameUsername">Player</span>
+                </div>
+                <div class="stat-badge difficulty-badge" id="gameDiffBadge">
+                    <span id="gameDifficulty">Easy</span>
+                </div>
+                <div class="stat-badge score-badge">
+                    <span>🏆 <span id="gameScore">0</span></span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="stat-badge timer-badge" id="timerBadge">
+                    <span>⏱️ <span id="timeDisplay">60</span>s</span>
+                </div>
+                <div class="stat-badge correct-badge">
+                    <span>✓ <span id="correctDisplay">0</span></span>
+                </div>
+                <div class="stat-badge wrong-badge">
+                    <span>✗ <span id="wrongDisplay">0</span></span>
+                </div>
+                <div class="stat-badge accuracy-badge">
+                    <span>🎯 <span id="accuracyDisplay">0</span>%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-container">
+            <div class="game-box">
+                <div id="dashboardState" class="game-state active">
+                    <h2>Tap the Dice to Roll!</h2>
+                    <div class="color-grid">
+                        <div class="color-card red"><div class="color-label">+</div><div class="color-name">Addition</div></div>
+                        <div class="color-card blue"><div class="color-label">−</div><div class="color-name">Subtraction</div></div>
+                        <div class="color-card green"><div class="color-label">×</div><div class="color-name">Multiplication</div></div>
+                        <div class="color-card yellow"><div class="color-label">÷</div><div class="color-name">Division</div></div>
+                    </div>
+                    <div class="dice-container">
+                        <div id="dice" class="dice" onclick="rollDice()">
+                            <div id="diceContent">🎲</div>
+                        </div>
+                        <p class="dice-hint">Tap the dice to roll!</p>
+                    </div>
+                    <button onclick="quitGame()" class="btn-end">Quit Game</button>
+                </div>
+
+                <div id="countdownState" class="game-state">
+                    <div id="countdownDice" class="flip-dice">
+                        <div id="countdownNumber">3</div>
+                    </div>
+                    <p class="ready-text">Get Ready!</p>
+                </div>
+
+                <div id="playingState" class="game-state">
+                    <div class="question-number">Question <span id="questionNumber">1</span></div>
+                    <div id="questionCard" class="question-card">
+                        <div class="question-text" id="questionText">5 + 3 = ?</div>
+                        <div class="question-operation" id="questionOperation">Addition</div>
+                    </div>
+                    <div id="feedbackBox" class="feedback-box"></div>
+                    <div id="answerSection">
+                        <input type="number" id="answerInput" placeholder="Your answer" />
+                        <button onclick="submitAnswer()" class="btn-submit">Submit Answer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================ -->
+    <!-- GAME OVER SCREEN -->
+    <!-- ================================================ -->
+    <div id="gameOverScreen" class="screen">
+        <div class="container">
+            <div class="gameover-box">
+                <div id="newHighScoreBadge" class="new-highscore">🏆</div>
+                <div class="trophy-icon">🏆</div>
+                <h1 id="gameOverTitle">Game Over!</h1>
+                <p id="gameOverSubtext">Great job!</p>
+                <div class="difficulty-badge-large" id="gameOverDiffBadge">
+                    <span id="gameOverDifficulty">Easy</span> Mode
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card yellow">
+                        <p class="stat-label">Final Score</p>
+                        <p class="stat-value" id="finalScore">0</p>
+                    </div>
+                    <div class="stat-card purple">
+                        <p class="stat-label">High Score</p>
+                        <p class="stat-value" id="finalHighScore">0</p>
+                    </div>
+                    <div class="stat-card green">
+                        <p class="stat-label">Accuracy</p>
+                        <p class="stat-value" id="finalAccuracy">0%</p>
+                    </div>
+                    <div class="stat-card blue">
+                        <p class="stat-label">Questions</p>
+                        <p class="stat-value" id="finalQuestions">0</p>
+                    </div>
+                    <div class="stat-card emerald">
+                        <p class="stat-label">Correct</p>
+                        <p class="stat-value" id="finalCorrect">0</p>
+                    </div>
+                    <div class="stat-card red">
+                        <p class="stat-label">Wrong</p>
+                        <p class="stat-value" id="finalWrong">0</p>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button onclick="playAgain()" class="btn-playagain" id="playAgainBtn">Play Again</button>
+                    <button onclick="backToMain()" class="btn-change">Back to Main</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
